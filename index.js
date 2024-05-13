@@ -1,7 +1,5 @@
 const https = require('https');
 const querystring = require('querystring');
-const host = 'hcaptcha.com';
-const path = '/siteverify';
 const verify = (host, path, secret, token, remoteip = null, sitekey = null) => {
   return new Promise(function verifyPromise(resolve, reject) {
     const payload = {secret, response: token};
@@ -11,7 +9,6 @@ const verify = (host, path, secret, token, remoteip = null, sitekey = null) => {
     if (sitekey) {
       payload.sitekey = sitekey;
     }
-    // stringify the payload
     const data = querystring.stringify(payload);
     const options = {
       host,
@@ -49,13 +46,16 @@ const verify = (host, path, secret, token, remoteip = null, sitekey = null) => {
 const hcaptcha = (secret, token, remoteip = null, sitekey = null) => {
   verify('hcaptcha.com', '/siteverify', secret, token, remoteip, sitekey)
 }
-const hcaptcha = (secret, token, remoteip = null, sitekey = null) => {
+const turnstile = (secret, token, remoteip = null, sitekey = null) => {
   verify('challenges.cloudflare.com', '/turnstile/v0/siteverify, secret, token, remoteip, sitekey)
 }
-const hcaptcha = (secret, token, remoteip = null, sitekey = null) => {
+const recaptcha = (secret, token, remoteip = null, sitekey = null) => {
   verify('www.google.com', '/recaptcha/api/siteverify, secret, token, remoteip, sitekey)
 }
 
 module.exports = {
   verify,
+  hcaptcha,
+  recaptcha,
+  turnstile
 };
