@@ -1,22 +1,22 @@
 # hcaptcha
 
-Verify hCaptcha token validity; simply w/ no dependencies.
+Verify hCaptcha/recaptcha/cf turnstile tokens
 
 ## Install
 
 ```
-npm install --save hcaptcha
+npm install node-challenges-validation
 ```
 
 ## Usage
 
 ```js
-const {verify} = require('hcaptcha');
+const {recaptcha, hcaptcha, turnstile} = require('hcaptcha');
 
-const secret = 'my hcaptcha secret from hcaptcha.com';
-const token = 'token from widget';
+const recaptcha_secret = 'recaptcha secret';
+const recaptcha_token = 'token obtained from captcha widget';
 
-verify(secret, token)
+recaptcha(secret, token)
   .then((data) => {
     if (data.success === true) {
       console.log('success!', data);
