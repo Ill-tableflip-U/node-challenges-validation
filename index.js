@@ -1,13 +1,8 @@
 const https = require('https');
 const querystring = require('querystring');
-
 const host = 'hcaptcha.com';
 const path = '/siteverify';
-
-// verifies the given token by doing an HTTP POST request
-// to the hcaptcha.com/siteverify endpoint by passing the
-// hCaptcha secret key and token as the payload.
-const verify = (secret, token, remoteip = null, sitekey = null) => {
+const verify = (host, path, secret, token, remoteip = null, sitekey = null) => {
   return new Promise(function verifyPromise(resolve, reject) {
     const payload = {secret, response: token};
     if (remoteip) {
@@ -18,9 +13,6 @@ const verify = (secret, token, remoteip = null, sitekey = null) => {
     }
     // stringify the payload
     const data = querystring.stringify(payload);
-
-    // set up options for the request
-    // note that we're using form data here instead of sending JSON
     const options = {
       host,
       path,
@@ -30,10 +22,6 @@ const verify = (secret, token, remoteip = null, sitekey = null) => {
         'content-length': Buffer.byteLength(data),
       },
     };
-
-    // make the request, add response chunks to buffer, and finally resolve
-    // with the response. if any errors arise call the promise's reject
-    // function with the error.
     const request = https.request(options, (response) => {
       response.setEncoding('utf8');
 
@@ -57,6 +45,16 @@ const verify = (secret, token, remoteip = null, sitekey = null) => {
     request.end();
   });
 };
+
+const hcaptcha = (secret, token, remoteip = null, sitekey = null) => {
+  verify('hcaptcha.com', '/siteverify', secret, token, remoteip, sitekey)
+}
+const hcaptcha = (secret, token, remoteip = null, sitekey = null) => {
+  verify('challenges.cloudflare.com', '/turnstile/v0/siteverify, secret, token, remoteip, sitekey)
+}
+const hcaptcha = (secret, token, remoteip = null, sitekey = null) => {
+  verify('www.google.com', '/recaptcha/api/siteverify, secret, token, remoteip, sitekey)
+}
 
 module.exports = {
   verify,
